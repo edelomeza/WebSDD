@@ -13,3 +13,4 @@ Estado: `gitleaks-action@v2` abortaba con `toml: expected newline but got U+002A
 Decisiones: allowlist a basic strings doble-quote (`paths`/`regexes` con `\\` y `\"`); `'` literal no escapa en TOML single-quote y cerraba el regex prematuramente. Verificado con `smol-toml@1.9.1`: sintaxis vieja falla, nueva parsea (3 paths + 1 regex `http://mock-api[^\s"']*`, compila).
 A evitar: strings TOML single-quote con `'` o `\` dentro; usar doble-quote con escapes.
 Seguimiento: `gitleaks-action@v2` en PR exigió `GITHUB_TOKEN`; job `secret` en `ci-pr.yml` con `permissions: contents/pull-requests read` + `env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}` (token automático, sin secretos manuales).
+Seguimiento 2: `'Allowlist' expected a map, got 'slice'` → `[[allowlist]]` cambiado a `[allowlist]` (mapa global; `[[...]]` solo vale en `[[rules.allowlists]]`, confirmado contra `config/gitleaks.toml` oficial v8.24.3).
