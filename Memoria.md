@@ -12,3 +12,4 @@ A evitar: código sin spec NNN aprobada; secretos en `appsettings.json` real o l
 Estado: `gitleaks-action@v2` abortaba con `toml: expected newline but got U+002A '*'` y `results.sarif does not exist` (secundario, sin SARIF generado).
 Decisiones: allowlist a basic strings doble-quote (`paths`/`regexes` con `\\` y `\"`); `'` literal no escapa en TOML single-quote y cerraba el regex prematuramente. Verificado con `smol-toml@1.9.1`: sintaxis vieja falla, nueva parsea (3 paths + 1 regex `http://mock-api[^\s"']*`, compila).
 A evitar: strings TOML single-quote con `'` o `\` dentro; usar doble-quote con escapes.
+Seguimiento: `gitleaks-action@v2` en PR exigió `GITHUB_TOKEN`; job `secret` en `ci-pr.yml` con `permissions: contents/pull-requests read` + `env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}` (token automático, sin secretos manuales).
