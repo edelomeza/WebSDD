@@ -1,0 +1,16 @@
+rules:
+  - id: websdd-no-connectionstrings
+    languages: [csharp, generic]
+    severity: ERROR
+    message: "Prohibido ConnectionStrings: el BFF consume API externa (constitution §6)."
+    pattern-regex: "ConnectionStrings"
+    paths:
+      include: ["WebSDD/**/*.cs", "WebSDD/**/*.cshtml"]
+      exclude: ["*.md"]
+  - id: websdd-no-html-raw
+    languages: [generic]
+    severity: WARNING
+    message: "@Html.Raw requiere justificación XSS en el PR (AGENTS §6)."
+    pattern: "@Html.Raw"
+    paths:
+      include: ["WebSDD/**/*.cshtml"]

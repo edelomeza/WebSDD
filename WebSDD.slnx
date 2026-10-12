@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="WebSDD/WebSDD.csproj" />
+  <Project Path="UnitTest/UnitTest.csproj" />
+  <Project Path="IntegrationTest/IntegrationTest.csproj" />
+  <Project Path="SecurityTest/SecurityTest.csproj" />
+</Solution>

@@ -1,0 +1,9 @@
+{
+  "stryker-config": {
+    "project": "WebSDD/WebSDD.csproj",
+    "since": { "target": "main" },
+    "thresholds": { "break": 0 },
+    "reporters": ["clear-text"],
+    "concurrency": 1
+  }
+}

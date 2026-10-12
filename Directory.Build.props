@@ -1,0 +1,24 @@
+<Project>
+  <!-- NFR-002: NuGetAudit + analizadores activos vía props. SCS 5.6.7 verificado contra Roslyn build; si CS8032, documentar y quedarse con Sonar+CodeQL+Semgrep. -->
+  <!-- Decisión empírica 2026-10-12 (build): EnforceCodeStyleInBuild=false. Las reglas IDE
+       de estilo (IDE0008 var, IDE0058 fluent, IDE0160) chocan con el hosting mínimo idiomático.
+       Siguen como errores: compilador + CA (.editorconfig) + Sonar + SCS. -->
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <NuGetAudit>true</NuGetAudit>
+    <NuGetAuditMode>all</NuGetAuditMode>
+    <NuGetAuditLevel>low</NuGetAuditLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.35.0.4138">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SecurityCodeScan.VS2019" Version="5.6.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

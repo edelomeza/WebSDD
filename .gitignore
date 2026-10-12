@@ -1,0 +1,42 @@
+# Build
+bin/
+obj/
+publish/
+TestResults/
+coverage*.xml
+coverage*.json
+
+# VS / VSCode
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Secrets: appsettings real nunca en git (AGENTS §6). Solo Example + Development.
+**/appsettings.json
+!**/appsettings.Example.json
+!**/appsettings.Development.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs y reportes generados (Serilog rolling, Stryker mutantes, carga/perf)
+logs/
+reports/
+StrykerOutput/
+*.nupkg
+
+# Secretos materiales (además de appsettings.json ya cubierto arriba)
+.env
+*.env
+*.pfx
+*.key
+*.pem
+*.PublishSettings
+*.pubxml
+secrets.json
+
+# IDE extra
+.idea/
+*.swp
