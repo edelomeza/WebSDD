@@ -5,5 +5,5 @@ useDefault = true
 
 [[allowlist]]
 description = "Placeholder API externa y docs"
-paths = ['WebSDD/appsettings.Example.json', 'compose.yml', '.*\\.md$']
-regexes = ['http://mock-api[^\\s"\']*']
+paths = ["WebSDD/appsettings.Example.json", "compose.yml", ".*\\.md$"]
+regexes = ["http://mock-api[^\\s\"']*"]
