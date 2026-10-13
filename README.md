@@ -29,14 +29,16 @@ Skills: `aspnet-core`, `bootstrap5-ui`, `slice-module`, `slice-pattern`, `qualit
 
 ## Prerrequisitos
 - .NET 10 SDK (`dotnet --version` → 10.x)
-- Python 3 (solo gates `scripts/check_coverage*.py`; en CI ubuntu ya existe)
-- Docker (solo contenedores) + Gitleaks (pre-commit)
+- Python 3 (pre-commit + gates `scripts/check_coverage*.py`; en CI ubuntu ya existe)
+- Gitleaks (hook `gitleaks protect --staged`; instalar desde https://github.com/gitleaks/gitleaks/releases)
+- Docker (solo contenedores)
 
 ## Setup
 ```powershell
 cp WebSDD/appsettings.Example.json WebSDD/appsettings.json
 dotnet restore
-pre-commit install  # hooks format+gitleaks (requiere Python, ver Prerrequisitos)
+pip install pre-commit
+pre-commit install  # hooks locales format+gitleaks (requieren SDK+gitleaks; si faltan, el hook falla con mensaje claro, no silencioso)
 dotnet run --project WebSDD/WebSDD.csproj
 docker compose up webapp  # :5001→8080, mock :7227
 ```

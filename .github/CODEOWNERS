@@ -1,0 +1,5 @@
+# CODEOWNERS — WebSDD
+# Sustitución del handle: reemplazar @REVISOR-PLACEHOLDER por el handle
+# real del revisor (p. ej. @tu-usuario). 1 revisor requerido por CHECKLIST_PR.md.
+# Ubicación válida GitHub: .github/CODEOWNERS (también valen /CODEOWNERS o docs/CODEOWNERS).
+* @REVISOR-PLACEHOLDER
