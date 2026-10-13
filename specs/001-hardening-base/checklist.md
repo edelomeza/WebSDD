@@ -7,4 +7,4 @@
 
 ## Aprobación
 - [x] Borrador con evidencia
-- [ ] Firmado solo con revisor + `CHECKLIST_PR.md`
+- [x] Firmado solo con revisor + `CHECKLIST_PR.md` (revisor aprobó 2026-10-13; PR #3 + #4)

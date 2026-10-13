@@ -31,12 +31,13 @@ No config eager en DI con overrides WAF — `IOptionsMonitor` lazy.
 No duplicar docs vivos — canónico en `docs/`.
 No `catch(Exception)` solo.
 No `Invoke-WebRequest` sin `-UseBasicParsing` en PS5.1.
+No `env`/`secrets` en `jobs.<id>.if` de Actions (contexto inexistente ahí; el guard va a nivel de step).
 
 ## 4. Verificación por slice
 `build` Release 0/0 antes de test.
 Unit/Integration/Security `--no-build` verdes.
 `critic-guardrails.ps1` → PASS, `check_slnx.ps1` → PASS, `check_endpoints.ps1` → OK, `check_coverage.py` ≥45%, `check_delta_coverage.py --min 80 --advisory` informa delta (no bloquea), `semgrep scan --config=auto --config=.semgrep/semgrep.yaml --error` 0 nuevos.
-Stryker advisory (`since:main`, `break:0`, `continue-on-error`) + nightly opcional; tras él siempre `build` antes de `--no-build`.
+Stryker advisory (`since:main`, `break:0`, `continue-on-error`, reporter `cleartext` — `clear-text` con guion es de StrykerJS) + nightly opcional; tras él siempre `build` antes de `--no-build`.
 SonarCloud informativo con guard `env.TOKEN`; Trivy config-scan + Hadolint en base; imagen HIGH/CRITICAL + SBOM CycloneDX + ZAP en CD.
 `curl /health/ready` 200, 503 si cae dependencia.
 
