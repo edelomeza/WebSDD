@@ -2,6 +2,10 @@
 
 > Bitácora viva por fase/slice según `specs/templates/memoria-entry-template.md`. Máx ~10000 líneas: resumir lo que no aporte. Sin claves, tokens ni PII. Si algo se vuelve regla permanente, mover a `AGENTS.md`.
 
+## Firma 002 + T-000 cerrado — 000 sigue parcial (2026-10-13)
+Estado: 002 firmada (revisor aprobó, merge PR #11); 000/T-000 cerrado con corrección: `main` SÍ protegida vía ruleset `Main Proteccion` (id 24954068, PR + 1 aprobación, anti deletion/non-FF) — no hubo que activar nada. 000/T-030/T-031 siguen abiertos (daemon Docker apagado, reverificado hoy); firma 000 bloqueada hasta Docker + revisor.
+Decisiones: corregir el diagnóstico previo (`branches/main/protection` 404 ≠ sin protección; el ruleset es la vía moderna y ya estaba activo).
+A evitar: concluir "sin protección" desde un solo endpoint legacy; consultar `rulesets` antes de afirmar.
 ## Fase-2 quality gates — 002 en verde local (2026-10-13)
 Estado: tasks 3/3; coverage PASS 89.0% fusionado (129/145 líneas, 3 reportes) ≥45%; critic PASS, slnx PASS, endpoints OK, sdd PASS, delta advisory exit 0; `semgrep.yaml`/`stryker-config.json`/`xunit.runner.json`/`ci-pr.yml` parses OK; guard T-003 verificado (workflow intacto). Spec 002 Borrador con evidencia.
 Decisiones: fix `scripts/check_coverage.py` por fusión (unión de líneas cubiertas, máx de hits, excluyendo paquetes test) en vez de peor-de-reportes — el mínimo global lo arrastraba a 0.0% el reporte vacío de SecurityTest; corregido `plan.md` (ya no lista `ci-pr.yml` extendido, es de 003); reportes stale limpiados antes de medir (solo `TestResults/` fresco, ignorado por git).
