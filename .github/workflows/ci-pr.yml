@@ -155,3 +155,76 @@ jobs:
       - name: sonar informativo
         if: "${{ env.SONAR_TOKEN != '' }}"
         run: 'echo "SonarCloud pendiente de alta de proyecto (deuda 003: cuerpo real al configurar)"'
+
+  trivy-config:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: trivy config scan
+        uses: aquasecurity/trivy-action@0.36.0
+        with:
+          scan-type: config
+          scan-ref: .
+          format: sarif
+          output: trivy-config.sarif
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+      - name: upload sarif
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-config.sarif
+
+  trivy-image:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: build image
+        run: docker build -f WebSDD/Dockerfile -t websdd:ci .
+      - name: trivy image scan
+        uses: aquasecurity/trivy-action@0.36.0
+        with:
+          image-ref: websdd:ci
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+
+  sbom:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: sbom cyclonedx
+        uses: anchore/sbom-action@v0.24.3
+        with:
+          path: ./
+          format: cyclonedx-json
+          output-file: sbom.cyclonedx.json
+          upload-artifact: 'false'
+      - name: upload sbom
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-cyclonedx
+          path: sbom.cyclonedx.json
+
+  hadolint:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: hadolint dockerfile
+        uses: hadolint/hadolint-action@v3.5.0
+        with:
+          dockerfile: WebSDD/Dockerfile
+          failure-threshold: error
