@@ -1,0 +1,47 @@
+name: dast-manual
+# DAST manual e informativo (SPEC-006). Solo workflow_dispatch: sin hosting
+# ni URL estable no puede ser automático ni bloqueante. Condición de
+# endurecimiento en docs/runbook-release.md §6.
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "URL objetivo (default: compose webapp en el runner)"
+        required: false
+        default: "http://localhost:5001"
+
+permissions:
+  contents: read
+
+# Un solo run a la vez: dos dispatch concurrentes chocarían en :5001/:7227.
+concurrency:
+  group: dast-manual
+  cancel-in-progress: true
+
+jobs:
+  zap-baseline:
+    runs-on: ubuntu-latest
+    # Informativo hasta URL estable: nunca bloquea el release.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose up -d --build webapp
+      - name: esperar /health/ready
+        run: |
+          for i in $(seq 1 24); do
+            curl -fsS http://localhost:5001/health/ready && exit 0
+            sleep 5
+          done
+          echo "webapp no lista tras 120s" >&2
+          exit 1
+      # Pin v0.14.0 validado en git/refs/tags (releases/latest decía v0.15.0
+      # sin tag resoluble; AGENTS.md §3). ZAP corre contenerizado: si no
+      # alcanza localhost del runner, re-dispatch con el gateway del bridge
+      # (p. ej. http://172.17.0.1:5001).
+      - uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: "${{ inputs.target }}"
+          fail_action: false
+          allow_issue_writing: false
+      - run: docker compose down
+        if: "${{ always() }}"
