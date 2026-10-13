@@ -2,6 +2,10 @@
 
 > Bitácora viva por fase/slice según `specs/templates/memoria-entry-template.md`. Máx ~10000 líneas: resumir lo que no aporte. Sin claves, tokens ni PII. Si algo se vuelve regla permanente, mover a `AGENTS.md`.
 
+## Fix ci-pr sonar guard — `env` a nivel de step en verde (2026-10-13)
+Estado: GitHub rechazaba `jobs.sonar.if: env.SONAR_TOKEN` (`Unrecognized named-value: 'env'`); `env` no existe en `jobs.<id>.if`, solo en `steps[*].if`. Guard movido al step `sonar informativo`, job sin `if`, `yaml.safe_load` OK (12 jobs).
+Decisiones: mantener `if` entrecomillado (`"${{ ... }}"`) por lección Fase-3 (sin comillas rompe `safe_load`); `env.SONAR_TOKEN` sí válido en step-`if`.
+A evitar: `env` o `secrets` en `jobs.<id>.if`; el `env:` del job se evalúa después del `if` y nunca puede auto-referenciarse.
 ## Fase-3 CI gates — 003 en verde local (2026-10-13)
 Estado: 7 jobs nuevos en `ci-pr.yml` (12 totales), `yaml.safe_load` OK, estructura verificada (`needs: build` x7, `stryker continue-on-error`, `sonar` guard, `pwsh` en ps1). Checks reales pendientes del PR. Spec 003 Borrador con evidencia.
 Decisiones: jobs aditivos tras `build`, sin tocar los 5 base; `permissions: contents: read` en nuevos; `fetch-depth: 0` solo en `stryker` (`since:main` lo exige) y `sonar` (blame futuro); `delta-check` es stub advisory (sin git, no requiere historial); `dotnet tool install -g dotnet-stryker` sin pinear (supply-chain es 004); `sonar` esqueleto con skip documentado (sin proyecto SonarCloud ni token).

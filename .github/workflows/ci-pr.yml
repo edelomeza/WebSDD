@@ -145,8 +145,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    # Informativo con guard: sin SONAR_TOKEN el job queda en skip documentado.
-    if: "${{ env.SONAR_TOKEN != '' }}"
+    # Informativo con guard a nivel de step: env no existe en jobs.<id>.if.
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
@@ -154,4 +153,5 @@ jobs:
         with:
           fetch-depth: 0
       - name: sonar informativo
+        if: "${{ env.SONAR_TOKEN != '' }}"
         run: 'echo "SonarCloud pendiente de alta de proyecto (deuda 003: cuerpo real al configurar)"'
