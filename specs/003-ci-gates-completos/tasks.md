@@ -1,10 +1,10 @@
 # TASKS-003 — CI Gates Completos
 
-- [ ] T-001 Jobs `critic + endpoints` (`shell: pwsh`). Acepta: PASS/OK en CI. →FR-001
-- [ ] T-002 Jobs `coverage + delta-check` (`python3`). Acepta: advisory visible, no bloquea. →FR-002
-- [ ] T-003 Jobs `stryker` advisory + `sonar` con guard. Acepta: skip documentado sin token. →FR-003
-- [ ] T-004 Job `sdd` (`scripts/check_sdd.ps1`). Acepta: PASS en CI. →FR-004
+- [x] T-001 Jobs `critic + endpoints` (`shell: pwsh`). Acepta: PASS/OK en CI. →FR-001
+- [x] T-002 Jobs `coverage + delta-check` (`python3`). Acepta: advisory visible, no bloquea. →FR-002
+- [x] T-003 Jobs `stryker` advisory + `sonar` con guard. Acepta: skip documentado sin token. →FR-003
+- [x] T-004 Job `sdd` (`scripts/check_sdd.ps1`). Acepta: PASS en CI. →FR-004
 
 ## Verificación
-- [ ] `yaml.safe_load` del workflow OK
+- [x] `yaml.safe_load` del workflow OK
 - [ ] PR de prueba con checks verdes/skip

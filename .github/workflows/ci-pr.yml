@@ -64,3 +64,94 @@ jobs:
       - uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  critic:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: critic guardrails
+        shell: pwsh
+        run: ./scripts/critic-guardrails.ps1
+      - name: slnx check
+        shell: pwsh
+        run: ./scripts/check_slnx.ps1
+
+  endpoints:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: endpoints check
+        shell: pwsh
+        run: ./scripts/check_endpoints.ps1
+
+  sdd:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: sdd lint
+        shell: pwsh
+        run: ./scripts/check_sdd.ps1
+
+  coverage:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: coverage advisory
+        run: python3 scripts/check_coverage.py
+
+  delta-check:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: delta coverage advisory
+        run: python3 scripts/check_delta_coverage.py --min 80 --advisory
+
+  stryker:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # since:main requiere historial completo
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: install stryker
+        run: dotnet tool install -g dotnet-stryker
+      - name: mutation advisory
+        run: dotnet stryker --config-file stryker-config.json
+
+  sonar:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    # Informativo con guard: sin SONAR_TOKEN el job queda en skip documentado.
+    if: "${{ env.SONAR_TOKEN != '' }}"
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: sonar informativo
+        run: 'echo "SonarCloud pendiente de alta de proyecto (deuda 003: cuerpo real al configurar)"'
