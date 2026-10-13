@@ -39,6 +39,7 @@ cp WebSDD/appsettings.Example.json WebSDD/appsettings.json
 dotnet restore
 pip install pre-commit
 pre-commit install  # hooks locales format+gitleaks (requieren SDK+gitleaks; si faltan, el hook falla con mensaje claro, no silencioso)
+# Windows: si format falla por EOL preexistente (CRLF vs lf), normalizar con dotnet format o commitear con --no-verify (ver Memoria Fase-5)
 dotnet run --project WebSDD/WebSDD.csproj
 docker compose up webapp  # :5001→8080, mock :7227
 ```
@@ -53,4 +54,4 @@ gitleaks protect --staged -c .gitleaks.toml
 ```
 
 ## Estructura
-- `WebSDD/` web, `UnitTest/|IntegrationTest/|SecurityTest/`, `specs/` + `specs/templates/`, `docs/` vivos, `scripts/` gates, `.github/workflows/ci-pr.yml`, `.opencode/agents/` + `.opencode/skills/`.
+- `WebSDD/` web, `UnitTest/|IntegrationTest/|SecurityTest/`, `specs/` + `specs/templates/`, `docs/` vivos, `scripts/` gates, `.github/workflows/` (ci-pr + dast-manual), `.opencode/agents/` + `.opencode/skills/`.

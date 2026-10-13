@@ -32,7 +32,8 @@ No duplicar docs vivos — canónico en `docs/`.
 No `catch(Exception)` solo.
 No `Invoke-WebRequest` sin `-UseBasicParsing` en PS5.1.
 No `env`/`secrets` en `jobs.<id>.if` de Actions (contexto inexistente ahí; el guard va a nivel de step).
-Pinear actions con el string exacto del tag (con `v` si la trae) y validarlo en `git/refs/tags/` — `releases/latest` no garantiza tag resolvible.
+Pinear actions con el string exacto del tag (con `v` si la trae) y validarlo en `git/refs/tags/` — `releases/latest` no garantiza tag resolvible. En `0.x`, pin exacto `@v0.x.y` (nunca `@v0`/`@0` flotante: rompe entre minors).
+`on:` sin comillas se parsea como booleano `True` en `yaml.safe_load`; validar triggers con `d.get('on', d.get(True))`.
 
 ## 4. Verificación por slice
 `build` Release 0/0 antes de test.
@@ -66,6 +67,7 @@ Sin OTel/Prometheus/Grafana por ahora.
 ## 9. Operación manual — sin hosting aún
 `dotnet publish` listo, no desplegado. Release manual según `docs/runbook-release.md`. PR con `.github/pull_request_template.md` + `CODEOWNERS` (1 revisor). Env `ApiSettings__BaseUrl` + `KeysPath` + verificación post-subida cuando haya hosting. Backup/seed documentados fuera del repo si aplican.
 Sin Redis: single-instance documentado. Sin AWS/SQS.
+PRs Dependabot: `UNSTABLE` = CI en curso (esperar, no intervenir); tras avanzar `main`, esperar rebase automático; en saltos major exigir tests verdes + vistazo a breaking changes.
 
 ## 10. Lecciones
 Fuente: `Memoria.md`. Si se vuelve regla, mover a `AGENTS.md`.
