@@ -2,6 +2,11 @@
 
 > Bitácora viva por fase/slice según `specs/templates/memoria-entry-template.md`. Máx ~10000 líneas: resumir lo que no aporte. Sin claves, tokens ni PII. Si algo se vuelve regla permanente, mover a `AGENTS.md`.
 
+## Fase-2 quality gates — 002 en verde local (2026-10-13)
+Estado: tasks 3/3; coverage PASS 89.0% fusionado (129/145 líneas, 3 reportes) ≥45%; critic PASS, slnx PASS, endpoints OK, sdd PASS, delta advisory exit 0; `semgrep.yaml`/`stryker-config.json`/`xunit.runner.json`/`ci-pr.yml` parses OK; guard T-003 verificado (workflow intacto). Spec 002 Borrador con evidencia.
+Decisiones: fix `scripts/check_coverage.py` por fusión (unión de líneas cubiertas, máx de hits, excluyendo paquetes test) en vez de peor-de-reportes — el mínimo global lo arrastraba a 0.0% el reporte vacío de SecurityTest; corregido `plan.md` (ya no lista `ci-pr.yml` extendido, es de 003); reportes stale limpiados antes de medir (solo `TestResults/` fresco, ignorado por git).
+Deuda: semgrep 0 nuevos solo verificable con CLI (ausente local, corre en CI); umbral 45% holgado frente a 89% real.
+A evitar: `min()` entre reportes de runs distintos (un run sin cobertura del producto hunde el gate); medir con `TestResults/` stale de corridas viejas.
 ## Firmas 001/003 — revisor aprobó 2026-10-13
 Estado: specs 001 y 003 conciliadas con lo implementado y firmadas (revisor aprobó; PR #3/#4 para 001, PR #5/#6/#7 para 003). 000 sigue Borrador con evidencia (T-000/T-030/T-031 abiertos).
 Decisiones: aceptación 001 marcada con evidencia local+CI; FR-003 de 003 corregido (guard sonar a nivel de step, reporter `cleartext`) para que la spec describa lo mergeado; 2 lecciones promovidas a `AGENTS.md` §3 (no `env`/`secrets` en `jobs.<id>.if`) y §4 (reporter Stryker); `constitution.md` sin cambios (sin conflicto).

@@ -1,7 +1,7 @@
 # PLAN-002 — Quality Gates (WebSDD)
 
 ## 1. Archivos
-- `scripts/*`, `.semgrep/semgrep.yaml`, `stryker-config.json`, `xunit.runner.json` serie, `.github/workflows/ci-pr.yml` extendido.
+- `scripts/*`, `.semgrep/semgrep.yaml`, `stryker-config.json`, `xunit.runner.json` serie. (`ci-pr.yml` ya cableado en 003; este spec no lo toca — guard T-003.)
 
 ## 2. Riesgos
 - Stryker deja mutantes → siempre `build` después.
