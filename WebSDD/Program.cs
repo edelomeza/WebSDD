@@ -15,10 +15,11 @@ builder.Services.AddResponseCompression(o => o.EnableForHttps = true);
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
+var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"]
+    ?? throw new InvalidOperationException("ApiSettings:BaseUrl missing");
 builder.Services.AddHttpClient("api", c =>
 {
-    c.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]
-        ?? throw new InvalidOperationException("ApiSettings:BaseUrl missing"));
+    c.BaseAddress = new Uri(apiBaseUrl);
     c.Timeout = TimeSpan.FromSeconds(30);
 }).AddStandardResilienceHandler();
 

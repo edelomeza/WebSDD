@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace IntegrationTest;
 
-public class HardeningTests : IClassFixture<WebApplicationFactory<Program>>
+public class HardeningTests : IClassFixture<HardeningFactory>
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly HardeningFactory _factory;
 
-    public HardeningTests(WebApplicationFactory<Program> factory)
+    public HardeningTests(HardeningFactory factory)
     {
         _factory = factory;
     }
