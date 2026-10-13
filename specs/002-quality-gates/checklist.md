@@ -1,9 +1,9 @@
 # Checklist 002 — Quality Gates
 
 ## DoD
-- [ ] Scripts PASS/OK + coverage ≥45% + semgrep 0 nuevos
-- [ ] `Memoria.md` actualizada
+- [x] Scripts PASS/OK + coverage ≥45% + semgrep 0 nuevos (coverage 89.0%; semgrep parse OK, 0 nuevos pendiente CI)
+- [x] `Memoria.md` actualizada
 
 ## Aprobación
-- [ ] Borrador con evidencia
+- [x] Borrador con evidencia
 - [ ] Firmado solo con revisor + `CHECKLIST_PR.md`
