@@ -24,3 +24,6 @@ dotnet_diagnostic.CA3012.severity = error
 dotnet_diagnostic.CA3100.severity = error
 dotnet_diagnostic.CA5350.severity = error
 dotnet_diagnostic.CA5351.severity = error
+
+# SPEC-001 FR-002: S1135 caza TODO sin issue
+dotnet_diagnostic.S1135.severity = error

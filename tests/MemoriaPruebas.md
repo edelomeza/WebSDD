@@ -4,7 +4,7 @@
 
 ## Estructura
 - `UnitTest/`: lógica aislada + PageModels/Controladores con dependencias mockeadas.
-- `IntegrationTest/`: `WebApplicationFactory` + `UseSetting("UseInMemoryDatabase","true")`. Requiere `public partial class Program` (deuda hasta implementarlo).
+- `IntegrationTest/`: `WebApplicationFactory` + `UseSetting("UseInMemoryDatabase","true")`. En .NET 10 el `Program` generado ya es público (ASP0027: `public partial class Program` innecesario).
 - `SecurityTest/`: auth requerida → redirect/401, antiforgery real, XSS `MemberData`, secretos.
 
 ## Moq

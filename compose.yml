@@ -11,6 +11,8 @@ services:
     depends_on:
       mock-api:
         condition: service_healthy
+    volumes:
+      - dpkeys:/var/dpkeys
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health || exit 1"]
       interval: 10s
@@ -30,3 +32,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+volumes:
+  dpkeys:
