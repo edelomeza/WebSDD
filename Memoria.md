@@ -2,6 +2,10 @@
 
 > Bitácora viva por fase/slice según `specs/templates/memoria-entry-template.md`. Máx ~10000 líneas: resumir lo que no aporte. Sin claves, tokens ni PII. Si algo se vuelve regla permanente, mover a `AGENTS.md`.
 
+## Fix ci-pr sonar guard — `env` a nivel de step en verde (2026-10-13)
+Estado: GitHub rechazaba `jobs.sonar.if: env.SONAR_TOKEN` (`Unrecognized named-value: 'env'`); `env` no existe en `jobs.<id>.if`, solo en `steps[*].if`. Guard movido al step `sonar informativo`, job sin `if`, `yaml.safe_load` OK (12 jobs).
+Decisiones: mantener `if` entrecomillado (`"${{ ... }}"`) por lección Fase-3 (sin comillas rompe `safe_load`); `env.SONAR_TOKEN` sí válido en step-`if`.
+A evitar: `env` o `secrets` en `jobs.<id>.if`; el `env:` del job se evalúa después del `if` y nunca puede auto-referenciarse.
 ## Fix stryker reporter — `cleartext` sin guion (2026-10-13)
 Estado: `dotnet stryker` abortaba con `These reporter values are incorrect: clear-text`; `clear-text` es de StrykerJS, en Stryker.NET v5 el valor es `cleartext`. Cambiado en `stryker-config.json:6`, JSON validado (`ConvertFrom-Json` OK). Mutación completa pendiente de corrida local.
 A evitar: `clear-text` con guion en Stryker.NET; validar la config antes de asumir fallo de mutación.
