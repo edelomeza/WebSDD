@@ -33,6 +33,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddResponseCompression(o => o.EnableForHttps = true);
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddHealthChecks(); // Requerido por MapHealthChecks (verificado 2026-10-13: sin esto InvalidOperationException al arrancar).
 builder.Services.AddHttpClient("api", c => {
   c.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]
     ?? throw new InvalidOperationException("ApiSettings:BaseUrl missing"));
