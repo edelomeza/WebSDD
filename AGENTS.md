@@ -32,6 +32,7 @@ No duplicar docs vivos — canónico en `docs/`.
 No `catch(Exception)` solo.
 No `Invoke-WebRequest` sin `-UseBasicParsing` en PS5.1.
 No `env`/`secrets` en `jobs.<id>.if` de Actions (contexto inexistente ahí; el guard va a nivel de step).
+Pinear actions con el string exacto del tag (con `v` si la trae) y validarlo en `git/refs/tags/` — `releases/latest` no garantiza tag resolvible.
 
 ## 4. Verificación por slice
 `build` Release 0/0 antes de test.

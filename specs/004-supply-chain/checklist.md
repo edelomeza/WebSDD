@@ -1,10 +1,10 @@
 # Checklist 004 — Supply Chain
 
 ## DoD
-- [ ] `spec.md`/`plan.md` conciliados con implementado
-- [ ] Pins verificados y registrados en Memoria
-- [ ] `Memoria.md` actualizada
+- [x] `spec.md`/`plan.md` conciliados con implementado
+- [x] Pins verificados y registrados en Memoria
+- [x] `Memoria.md` actualizada
 
 ## Aprobación
-- [ ] Borrador con evidencia
+- [x] Borrador con evidencia
 - [ ] Firmado solo con revisor + `CHECKLIST_PR.md`

@@ -2,6 +2,11 @@
 
 > Bitácora viva por fase/slice según `specs/templates/memoria-entry-template.md`. Máx ~10000 líneas: resumir lo que no aporte. Sin claves, tokens ni PII. Si algo se vuelve regla permanente, mover a `AGENTS.md`.
 
+## Fase-4 supply chain — 004 en verde local (2026-10-13)
+Estado: tasks 4/4 código+config (verificación CI pendiente del PR); `ci-pr.yml` 12→16 jobs; `.github/dependabot.yml` nuevo (nuget+actions semanal); `yaml.safe_load` OK x2; `Dockerfile`/`compose.yml` intactos. Spec 004 Borrador con evidencia.
+Decisiones: spike pins vía `gh api releases/latest` — existentes se mantienen (`checkout/setup-dotnet/cache@v4`, `codeql@v3`, `semgrep@v1`, `gitleaks@v2`; latest: v7.0.1/v6.0.0/v6.1.0/v4.38.3/v1/v3.0.0; Dependabot propondrá upgrades), nuevos al latest (`trivy-action@v0.36.0`, `hadolint-action@v3.5.0`, `sbom-action@v0.24.3` con `cyclonedx-json`, `upload-artifact@v4` generación del repo); trivy con `severity: HIGH,CRITICAL` + `exit-code: 1` + SARIF a codeql; Hadolint `failure-threshold: error`; SBOM con upload explícito (`upload-artifact: false` en el step de generación).
+Deuda: verificación real Trivy/imagen/SBOM/Hadolint solo en CI (sin daemon ni CLIs local); tiempo de build de imagen por PR a vigilar (plan §4: cache o mover a `main` si excede).
+A evitar: pinear 0.x con major flotante (`@0` rompe entre minors; usar `@v0.36.0`/`@v0.24.3` con la `v` del tag); repetir el bug sonar (`if` con `env` a nivel de job — verificado ausente). Incidente 2026-10-13: CI `Unable to resolve action trivy-action@0.36.0` por tag sin `v`; fix `@v0.36.0` validado en `git/refs/tags/` (el otro 404 confirma).
 ## Firma 002 + T-000 cerrado — 000 sigue parcial (2026-10-13)
 Estado: 002 firmada (revisor aprobó, merge PR #11); 000/T-000 cerrado con corrección: `main` SÍ protegida vía ruleset `Main Proteccion` (id 24954068, PR + 1 aprobación, anti deletion/non-FF) — no hubo que activar nada. 000/T-030/T-031 siguen abiertos (daemon Docker apagado, reverificado hoy); firma 000 bloqueada hasta Docker + revisor.
 Decisiones: corregir el diagnóstico previo (`branches/main/protection` 404 ≠ sin protección; el ruleset es la vía moderna y ya estaba activo).
