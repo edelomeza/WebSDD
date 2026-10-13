@@ -7,4 +7,4 @@
 
 ## Verificación
 - [x] `yaml.safe_load` del workflow OK
-- [ ] PR de prueba con checks verdes/skip
+- [x] PR de prueba con checks verdes/skip (cerrado 2026-10-13 en `specPendientes`: PR #6 MERGED con 13/13 checks verdes — sonar skip documentado sin token, stryker advisory)

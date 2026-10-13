@@ -2,7 +2,7 @@
 
 ## DoD
 - [x] `spec.md`/`plan.md` conciliados con implementado
-- [ ] Jobs nuevos verdes o skip con causa en PR de prueba
+- [x] Jobs nuevos verdes o skip con causa en PR de prueba (PR #6: 13/13 verde; sonar skip sin token, resto advisory)
 - [x] `Memoria.md` actualizada
 
 ## Aprobación
