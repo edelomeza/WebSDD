@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.RateLimiting;
@@ -6,6 +8,7 @@ using System.Globalization;
 using System.Threading.RateLimiting;
 using WebSDD.Logging;
 using WebSDD.Middleware;
+using WebSDD.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,9 +41,11 @@ builder.Services.AddCors(o => o.AddDefaultPolicy(p => p
     .AllowAnyHeader()
     .AllowAnyMethod()));
 
-// T-002: RateLimiter global antes de Auth (Auth passthrough en base: sin UseAuthentication).
+// T-002: RateLimiter global antes de Auth + policy Login (SPEC-007 T-003: 5/5min).
 var permitLimit = builder.Configuration.GetValue("RateLimiting:Global:PermitLimit", 1000);
 var windowSeconds = builder.Configuration.GetValue("RateLimiting:Global:WindowSeconds", 60);
+var loginPermitLimit = builder.Configuration.GetValue("RateLimiting:Login:PermitLimit", 5);
+var loginWindowSeconds = builder.Configuration.GetValue("RateLimiting:Login:WindowSeconds", 300);
 builder.Services.AddRateLimiter(o =>
 {
     o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -61,7 +66,41 @@ builder.Services.AddRateLimiter(o =>
             AutoReplenishment = true,
         });
     });
+    o.AddPolicy("Login", httpContext =>
+    {
+        var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
+        {
+            PermitLimit = loginPermitLimit,
+            Window = TimeSpan.FromSeconds(loginWindowSeconds),
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+            QueueLimit = 0,
+            AutoReplenishment = true,
+        });
+    });
 });
+
+// SPEC-007 T-003: Cookie HttpOnly+Secure+Strict+Sliding 24h, auth requerida por defecto.
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(o =>
+    {
+        o.Cookie.Name = ".WebSDD.Auth";
+        o.Cookie.HttpOnly = true;
+        o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        o.Cookie.SameSite = SameSiteMode.Strict;
+        o.SlidingExpiration = true;
+        o.ExpireTimeSpan = TimeSpan.FromHours(24);
+        o.LoginPath = "/Login";
+        o.LogoutPath = "/Logout";
+        o.AccessDeniedPath = "/Denegado";
+    });
+builder.Services.AddAuthorizationBuilder()
+    .SetFallbackPolicy(new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build());
+
+// SPEC-007 T-002: servicio de Auth (único acceso a la API externa de Auth).
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // T-002: timeout de request desde config (60s).
 var timeoutSeconds = builder.Configuration.GetValue("RequestTimeoutSeconds", 60);
@@ -118,10 +157,13 @@ app.UseRouting();
 app.UseCors();
 app.UseRateLimiter();
 app.UseRequestTimeouts();
+// SPEC-007 T-003: RateLimiter antes de Auth (constitución §4).
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapStaticAssets();
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages().WithStaticAssets();
-// /health exento de rate-limit: medición fiable.
-app.MapHealthChecks("/health").DisableRateLimiting();
-app.MapHealthChecks("/health/ready").DisableRateLimiting();
+// /health exento de rate-limit y de auth por defecto: medición fiable.
+app.MapHealthChecks("/health").AllowAnonymous().DisableRateLimiting();
+app.MapHealthChecks("/health/ready").AllowAnonymous().DisableRateLimiting();
 await app.RunAsync();

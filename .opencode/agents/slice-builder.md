@@ -18,6 +18,9 @@ permissions:
     resource: "WebSDD/Pages/**"
     effect: allow
   - action: edit
+    resource: "WebSDD/Program.cs"
+    effect: allow
+  - action: edit
     resource: "Memoria.md"
     effect: allow
   - action: edit
@@ -43,4 +46,4 @@ Reglas genericas (sin flujo CRUD fijo):
 - Verifica con `dotnet build -c Release -p:TreatWarningsAsErrors=true`.
 - Al cerrar: concilia spec/plan con implementado, actualiza `Memoria.md` (entrada Fase-N) y resuelve checklist (Borrador con evidencia). Regla permanente → `AGENTS.md`.
 
-No tocar: Auth/CSP/RateLimiter en `Program.cs`, workflows, `Dockerfile`, tests fuera de compilacion.
+No tocar: workflows, `Dockerfile`, tests fuera de compilacion. Excepción 007-login: puede tocar solo bloque Auth/RateLimiter en `WebSDD/Program.cs` (AddAuthentication/AddCookie/AddAuthorization fallback + policy Login + UseAuthentication/Authorization tras UseRateLimiter, orden §4); resto (HSTS/CORS/Kestrel/Serilog/DataProtection) intacto salvo spec.

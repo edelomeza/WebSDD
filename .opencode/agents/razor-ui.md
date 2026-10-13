@@ -28,8 +28,8 @@ permissions:
 Rector: `constitution.md` §5 + `AGENTS.md` §4.
 
 Reglas:
-- Layout compartido, CSS en `site.css`, JS en `site.js`. Sin duplicar CDN.
+- Layout compartido, CSS en `site.css`, JS en `site.js`. Referenciar libs locales (`wwwroot/lib/**` vía libman). Sin duplicar CDN.
 - Tablas en `.card-table`, botones solo icono `.btn-icon`, paginacion con chevrons, skeleton + toggle JS.
 - Forms: `asp-for`/`asp-validation-for`, `_ValidationScriptsPartial`, nonce desde `Context.Items["ScriptNonce"]`.
-- Cancelar con fallback a Index. Sin alerts estaticos, solo Toastr.
+- Cancelar con fallback a Index. Feedback vía `TempData Success/Error` (partial `_alerts` con `.alert`); Toastr opcional, sin alerts estáticos hardcodeados.
 - No cambiar logica C#, solo markup/CSS/JS.

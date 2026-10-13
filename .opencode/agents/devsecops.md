@@ -47,6 +47,15 @@ permissions:
   - action: edit
     resource: "CODEOWNERS"
     effect: allow
+  - action: edit
+    resource: "libman.json"
+    effect: allow
+  - action: edit
+    resource: "WebSDD/wwwroot/lib/**"
+    effect: allow
+  - action: shell
+    resource: "libman*"
+    effect: ask
   - action: shell
     resource: "docker*"
     effect: ask
@@ -62,5 +71,6 @@ Reglas:
 - Compose con perfiles; DAST solo manual (`workflow_dispatch`).
 - Supply chain: Dependabot nuget+actions, Trivy config/imagen HIGH/CRITICAL, SBOM CycloneDX artifact, Hadolint.
 - Calidad raíz: props, editorconfig CA3000+, gitleaks, pre-commit hooks, stryker/semgrep configs. Sin secretos.
+- Nueva lib frontend (ej. bootstrap-icons 007): evaluar licencia/mantenimiento/seguridad per §3, pin exacto en `libman.json`, copia local en `WebSDD/wwwroot/lib/**`, sin CDN duplicado.
 
-No tocar: código `WebSDD/`, tests, specs (solo `spec-planner`), `Memoria.md`.
+No tocar: código `WebSDD/` (excepto `WebSDD/wwwroot/lib/**` para restore libman), tests, specs (solo `spec-planner`), `Memoria.md`.
