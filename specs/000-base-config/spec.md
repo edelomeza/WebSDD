@@ -62,6 +62,7 @@ Estado: Borrador con evidencia
 Revisores:
 Fecha: 2026-10-12
 Detalle: infra creada y verificada (build 0/0, test 3/3, critic PASS). Evidencia en `specs/000-base-config/checklist.md` + `Memoria.md`.
+Reconciliación 2026-10-13 en rama `spec000`: `Program.cs` plantilla plan §2 + `AddHealthChecks` (requerido empírico), `Http.Resilience 10.7.0`, `UseAuthorization` removido, `/`+`/health`+`/health/ready` 200 verificados, `healthcheck` webapp en compose. Docker build/up y CI verde pendientes (daemon apagado / sin push).
 | Versión | Fecha | Autor | Cambio |
 |---|---|---|---|
 | 1.0.0 | 2026-10-12 |  | Creación inicial |
