@@ -2,6 +2,10 @@
 
 > Bitácora viva por fase/slice según `specs/templates/memoria-entry-template.md`. Máx ~10000 líneas: resumir lo que no aporte. Sin claves, tokens ni PII. Si algo se vuelve regla permanente, mover a `AGENTS.md`.
 
+## Firmas 001/003 — revisor aprobó 2026-10-13
+Estado: specs 001 y 003 conciliadas con lo implementado y firmadas (revisor aprobó; PR #3/#4 para 001, PR #5/#6/#7 para 003). 000 sigue Borrador con evidencia (T-000/T-030/T-031 abiertos).
+Decisiones: aceptación 001 marcada con evidencia local+CI; FR-003 de 003 corregido (guard sonar a nivel de step, reporter `cleartext`) para que la spec describa lo mergeado; 2 lecciones promovidas a `AGENTS.md` §3 (no `env`/`secrets` en `jobs.<id>.if`) y §4 (reporter Stryker); `constitution.md` sin cambios (sin conflicto).
+A evitar: firmar sin revisor; dejar `spec.md` describiendo lo viejo tras un fix (conciliar siempre al cerrar).
 ## Cierres specs pendientes — rama `specPendientes` en verde local (2026-10-13)
 Estado: 000/T-032 cerrado (ci-pr.yml 12 jobs; PR #5 y #6 MERGED verdes sin secrets); 000/Verificación cerrada salvo T-000 (build Release 0/0, tests 12/12 —Unit 5+Integration 6+Security 1—, grep patrones prohibidos vacío); 003/tasks + checklist cerrados (PR #6 con 13/13 checks verdes). Solo docs + verificación, cero código.
 Decisiones: T-000 queda abierto con causa (remote OK pero `main` SIN protección: `gh api branches/main/protection` → 404; activarla es decisión admin, no se hizo unilateralmente); T-030/T-031 quedan abiertos (daemon Docker sigue apagado, `docker build` falla por npipe inexistente); firmas 000/001/003 pendientes de revisor humano.
