@@ -6,6 +6,10 @@
 Estado: GitHub rechazaba `jobs.sonar.if: env.SONAR_TOKEN` (`Unrecognized named-value: 'env'`); `env` no existe en `jobs.<id>.if`, solo en `steps[*].if`. Guard movido al step `sonar informativo`, job sin `if`, `yaml.safe_load` OK (12 jobs).
 Decisiones: mantener `if` entrecomillado (`"${{ ... }}"`) por lección Fase-3 (sin comillas rompe `safe_load`); `env.SONAR_TOKEN` sí válido en step-`if`.
 A evitar: `env` o `secrets` en `jobs.<id>.if`; el `env:` del job se evalúa después del `if` y nunca puede auto-referenciarse.
+## Fix stryker reporter — `cleartext` sin guion (2026-10-13)
+Estado: `dotnet stryker` abortaba con `These reporter values are incorrect: clear-text`; `clear-text` es de StrykerJS, en Stryker.NET v5 el valor es `cleartext`. Cambiado en `stryker-config.json:6`, JSON validado (`ConvertFrom-Json` OK). Mutación completa pendiente de corrida local.
+A evitar: `clear-text` con guion en Stryker.NET; validar la config antes de asumir fallo de mutación.
+Corrida local 2026-10-13 en `fix/stryker-reporter`: 124 mutantes, 99 testeados (25 saltados: 8 NoCoverage + 17 Ignored por filtro), score final 54.21% (advisory, `break: 0` no rompe); `since:main` testeó todo por haber solo cambios no-C# vs `main` (`Memoria.md`, `stryker-config.json`). Puntos débiles: `SecretFilter` 100.00% (21 killed, 6 survived), `Program.cs` 38.71% (44 survived), `Error` 0.00% (5 survived). 11 tests detectados, 6:45 min con `concurrency: 1`.
 ## Fase-3 CI gates — 003 en verde local (2026-10-13)
 Estado: 7 jobs nuevos en `ci-pr.yml` (12 totales), `yaml.safe_load` OK, estructura verificada (`needs: build` x7, `stryker continue-on-error`, `sonar` guard, `pwsh` en ps1). Checks reales pendientes del PR. Spec 003 Borrador con evidencia.
 Decisiones: jobs aditivos tras `build`, sin tocar los 5 base; `permissions: contents: read` en nuevos; `fetch-depth: 0` solo en `stryker` (`since:main` lo exige) y `sonar` (blame futuro); `delta-check` es stub advisory (sin git, no requiere historial); `dotnet tool install -g dotnet-stryker` sin pinear (supply-chain es 004); `sonar` esqueleto con skip documentado (sin proyecto SonarCloud ni token).
