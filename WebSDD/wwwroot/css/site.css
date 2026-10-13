@@ -29,3 +29,31 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* SPEC-007 Login: primario #88E788 (texto oscuro para contraste AA sobre verde claro). */
+.btn-login {
+  background-color: #88E788;
+  border-color: #5aa85a;
+  color: #1a1a1a;
+}
+
+.btn-login:hover, .btn-login:focus {
+  background-color: #6fd46f;
+  border-color: #4c944c;
+  color: #1a1a1a;
+}
+
+.btn-login:focus-visible {
+  outline: 0.2rem solid #1a1a1a;
+  outline-offset: 0.1rem;
+}
+
+.login-card {
+  max-width: 26.25rem;
+  width: 100%;
+}
+
+/* La navbar es fixed-top: compensar para que el contenido no quede oculto. */
+body {
+  padding-top: 4.5rem;
+}

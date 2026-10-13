@@ -9,6 +9,16 @@
     {
       "library": "jquery@3.7.1",
       "destination": "WebSDD/wwwroot/lib/jquery/"
+    },
+    {
+      "library": "bootstrap-icons@1.11.3",
+      "provider": "jsdelivr",
+      "destination": "WebSDD/wwwroot/lib/bootstrap-icons/",
+      "files": [
+        "font/bootstrap-icons.min.css",
+        "font/fonts/bootstrap-icons.woff",
+        "font/fonts/bootstrap-icons.woff2"
+      ]
     }
   ]
 }

@@ -18,7 +18,8 @@ public class HardeningTests : IClassFixture<HardeningFactory>
     {
         var client = _factory.CreateClient();
 
-        var response = await client.GetAsync("/");
+        // 007-login: `/` exige auth; headers se verifican en ruta anónima.
+        var response = await client.GetAsync("/Login");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         response.Headers.Should().ContainSingle(h => h.Key == "X-Content-Type-Options")
@@ -39,8 +40,9 @@ public class HardeningTests : IClassFixture<HardeningFactory>
     {
         var client = _factory.CreateClient();
 
-        var first = ExtractNonce((await client.GetAsync("/")).Headers);
-        var second = ExtractNonce((await client.GetAsync("/")).Headers);
+        // 007-login: `/` exige auth; nonce se verifica en ruta anónima.
+        var first = ExtractNonce((await client.GetAsync("/Login")).Headers);
+        var second = ExtractNonce((await client.GetAsync("/Login")).Headers);
 
         first.Should().NotBeNullOrEmpty();
         second.Should().NotBeNullOrEmpty();
@@ -57,10 +59,11 @@ public class HardeningTests : IClassFixture<HardeningFactory>
         });
         var client = factory.CreateClient();
 
-        (await client.GetAsync("/")).StatusCode.Should().Be(HttpStatusCode.OK);
-        (await client.GetAsync("/")).StatusCode.Should().Be(HttpStatusCode.OK);
+        // 007-login: `/` exige auth; el global se verifica en ruta anónima.
+        (await client.GetAsync("/Login")).StatusCode.Should().Be(HttpStatusCode.OK);
+        (await client.GetAsync("/Login")).StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var limited = await client.GetAsync("/");
+        var limited = await client.GetAsync("/Login");
         limited.StatusCode.Should().Be((HttpStatusCode)429);
     }
 
@@ -78,7 +81,8 @@ public class HardeningTests : IClassFixture<HardeningFactory>
             BaseAddress = new Uri("https://example.com"),
         });
 
-        var response = await client.GetAsync("/");
+        // 007-login: `/` exige auth; HSTS se verifica en ruta anónima.
+        var response = await client.GetAsync("/Login");
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         response.Headers.Should().ContainSingle(h => h.Key == "Strict-Transport-Security")
@@ -97,7 +101,8 @@ public class HardeningTests : IClassFixture<HardeningFactory>
         });
         var client = factory.CreateClient();
 
-        (await client.GetAsync("/")).StatusCode.Should().Be(HttpStatusCode.OK);
+        // 007-login: `/` exige auth; el consumo global se verifica en ruta anónima.
+        (await client.GetAsync("/Login")).StatusCode.Should().Be(HttpStatusCode.OK);
 
         (await client.GetAsync("/health")).StatusCode.Should().Be(HttpStatusCode.OK);
         (await client.GetAsync("/health/ready")).StatusCode.Should().Be(HttpStatusCode.OK);
