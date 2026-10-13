@@ -2,6 +2,10 @@
 
 > Bitácora viva por fase/slice según `specs/templates/memoria-entry-template.md`. Máx ~10000 líneas: resumir lo que no aporte. Sin claves, tokens ni PII. Si algo se vuelve regla permanente, mover a `AGENTS.md`.
 
+## Cierres specs pendientes — rama `specPendientes` en verde local (2026-10-13)
+Estado: 000/T-032 cerrado (ci-pr.yml 12 jobs; PR #5 y #6 MERGED verdes sin secrets); 000/Verificación cerrada salvo T-000 (build Release 0/0, tests 12/12 —Unit 5+Integration 6+Security 1—, grep patrones prohibidos vacío); 003/tasks + checklist cerrados (PR #6 con 13/13 checks verdes). Solo docs + verificación, cero código.
+Decisiones: T-000 queda abierto con causa (remote OK pero `main` SIN protección: `gh api branches/main/protection` → 404; activarla es decisión admin, no se hizo unilateralmente); T-030/T-031 quedan abiertos (daemon Docker sigue apagado, `docker build` falla por npipe inexistente); firmas 000/001/003 pendientes de revisor humano.
+A evitar: asumir `main` protegida porque `CHECKLIST_PR.md` lo diga — verificar con la API; marcar tasks Docker sin evidencia de daemon.
 ## Fix ci-pr sonar guard — `env` a nivel de step en verde (2026-10-13)
 Estado: GitHub rechazaba `jobs.sonar.if: env.SONAR_TOKEN` (`Unrecognized named-value: 'env'`); `env` no existe en `jobs.<id>.if`, solo en `steps[*].if`. Guard movido al step `sonar informativo`, job sin `if`, `yaml.safe_load` OK (12 jobs).
 Decisiones: mantener `if` entrecomillado (`"${{ ... }}"`) por lección Fase-3 (sin comillas rompe `safe_load`); `env.SONAR_TOKEN` sí válido en step-`if`.
