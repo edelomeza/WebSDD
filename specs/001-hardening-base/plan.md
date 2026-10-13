@@ -10,6 +10,7 @@
 - `WebSDD/*.csproj`: Serilog x4; `Mvc.Testing 10.0.12` + `ProjectReference` web en tests.
 - `.editorconfig` (S1135 error), `compose.yml` (volumen `dpkeys`).
 - Tests: `IntegrationTest/HardeningTests.cs`, `UnitTest/SecretFilterTests.cs`.
+- `IntegrationTest/HardeningFactory.cs` (fix CI): factoría WAF con `UseSetting` espejo de Example (`ApiSettings:BaseUrl`, `Cors:AllowedOrigin`); `appsettings.json` es gitignorado y no existe en el runner.
 - `docs/*.md` esqueleto (notas 001, sin duplicar).
 
 ## 2. Riesgos

@@ -33,6 +33,7 @@ Revisores:
 Fecha: 2026-10-12
 Detalle: pendiente de implementación. Evidencia en `specs/001-hardening-base/checklist.md` + `Memoria.md`.
 Reconciliación 2026-10-13 en rama `spec001`: T-001–T-005 implementados y verificados (headers curl + nonce único, HSTS 365d vía WAF, 429 en umbral test, Serilog JSON + CorrelationId, build 0/0, tests 12/12). Gitleaks/semgrep vía CI.
+Fix CI (merge PR #3): `HardeningFactory` con defaults espejo de Example + `BaseUrl` leído eager en `Program.cs` (el delegado `AddHttpClient` es lazy).
 | Versión | Fecha | Autor | Cambio |
 |---|---|---|---|
 | 1.0.0 | 2026-10-12 |  | Creación inicial |
