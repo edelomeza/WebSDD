@@ -35,6 +35,7 @@ Estado: Borrador
 Revisores:
 Fecha: 2026-10-12
 Detalle: pendiente de implementación.
+Reconciliación 2026-10-13 en rama `spec003`: 7 jobs agregados a `ci-pr.yml` (`critic`, `endpoints`, `sdd`, `coverage`, `delta-check`, `stryker` advisory, `sonar` con guard), `yaml.safe_load` OK. Checks reales pendientes del PR.
 | Versión | Fecha | Autor | Cambio |
 |---|---|---|---|
 | 1.0.0 | 2026-10-12 |  | Creación inicial |
