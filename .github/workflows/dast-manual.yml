@@ -24,7 +24,7 @@ jobs:
     # Informativo hasta URL estable: nunca bloquea el release.
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: docker compose up -d --build webapp
       - name: esperar /health/ready
         run: |
