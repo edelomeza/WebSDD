@@ -49,10 +49,20 @@ var loginWindowSeconds = builder.Configuration.GetValue("RateLimiting:Login:Wind
 builder.Services.AddRateLimiter(o =>
 {
     o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-    o.OnRejected = (context, _) =>
+    o.OnRejected = async (context, cancellationToken) =>
     {
-        context.HttpContext.Response.Headers.RetryAfter = windowSeconds.ToString(CultureInfo.InvariantCulture);
-        return ValueTask.CompletedTask;
+        // 007-login: el 429 nunca va vacío (Chrome muestra página genérica):
+        // cuerpo legible + Retry-After del cupo que rechazó (Login 300s, global 60s).
+        var isLogin = string.Equals(
+            context.HttpContext.GetEndpoint()?.Metadata.GetMetadata<EnableRateLimitingAttribute>()?.PolicyName,
+            "Login",
+            StringComparison.Ordinal);
+        context.HttpContext.Response.Headers.RetryAfter = (isLogin ? loginWindowSeconds : windowSeconds)
+            .ToString(CultureInfo.InvariantCulture);
+        context.HttpContext.Response.ContentType = "text/plain; charset=utf-8";
+        await context.HttpContext.Response.WriteAsync(
+            "Demasiados intentos. Por favor, espera unos minutos e inténtalo de nuevo.",
+            cancellationToken).ConfigureAwait(false);
     };
     o.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
     {
@@ -68,6 +78,13 @@ builder.Services.AddRateLimiter(o =>
     });
     o.AddPolicy("Login", httpContext =>
     {
+        // 007-login: solo los POST consumen cupo (el GET del formulario/antiforgery no cuenta,
+        // si no 2 intentos reales agotan el límite de 5 y el usuario ve un 429 vacío).
+        if (!HttpMethods.IsPost(httpContext.Request.Method))
+        {
+            return RateLimitPartition.GetNoLimiter("login-get");
+        }
+
         var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
         return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
         {

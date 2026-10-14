@@ -30,11 +30,14 @@ body {
   text-align: start;
 }
 
-/* SPEC-007 Login: primario #88E788 (texto oscuro para contraste AA sobre verde claro). */
+/* SPEC-007 Login: primario #88E788 (texto oscuro #1a1a1a, contraste AAA). */
 .btn-login {
   background-color: #88E788;
   border-color: #5aa85a;
   color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 12px rgba(26, 26, 26, 0.12);
 }
 
 .btn-login:hover, .btn-login:focus {
@@ -48,12 +51,132 @@ body {
   outline-offset: 0.1rem;
 }
 
-.login-card {
+.login-col {
   max-width: 26.25rem;
   width: 100%;
+  margin-inline: auto;
+}
+
+.login-card {
+  width: 100%;
+  background-color: #fff;
+  border: 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 /* La navbar es fixed-top: compensar para que el contenido no quede oculto. */
 body {
   padding-top: 4.5rem;
+  background: linear-gradient(180deg, #e2f0ec 0%, #fff 100%);
+  background-attachment: fixed;
+}
+
+/* Login moderno: centrado vertical y horizontal real con navbar fija. */
+.login-wrap {
+  min-height: calc(100dvh - 7rem);
+  align-items: center;
+  padding-block: 2rem;
+}
+
+.login-title {
+  color: #1e3a2f;
+}
+
+.login-footer {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.login-hint {
+  font-size: 0.8rem;
+}
+
+.login-card .form-control {
+  border-color: #dee2e6;
+  border-radius: 0.5rem;
+}
+
+.login-card .form-control::placeholder {
+  color: #adb5bd;
+}
+
+.login-card .input-group-text {
+  background-color: #fff;
+  border-color: #dee2e6;
+  color: #6c757d;
+}
+
+.login-card .input-group .form-control {
+  border-radius: 0;
+}
+
+.login-card .input-group > :first-child {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+.login-card .input-group > :last-child {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.login-card .form-control:focus {
+  border-color: #5aa85a;
+  box-shadow: 0 0 0 0.25rem rgba(136, 231, 136, 0.35);
+}
+
+.password-eye {
+  background-color: #fff;
+  border-color: #dee2e6;
+  color: #1a1a1a;
+  cursor: pointer;
+}
+
+.password-eye:hover {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+  color: #1a1a1a;
+}
+
+.caps-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
+  color: #7f1d1d;
+}
+
+/* Principal moderna: misma tarjeta blanca + banda hero del login. */
+.hero-card {
+  border: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.badge-session {
+  background-color: #e7f9e7;
+  border: 1px solid #5aa85a;
+  border-radius: 999rem;
+  color: #1a1a1a;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+}
+
+.info-card {
+  border: 0;
+  border-top: 0.25rem solid #88E788;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.info-card .bi {
+  font-size: 1.5rem;
+  color: #2f7d2f;
 }

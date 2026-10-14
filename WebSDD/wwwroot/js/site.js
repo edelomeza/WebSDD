@@ -34,4 +34,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    document.querySelectorAll('input[data-caps-warn]').forEach((input) => {
+        const warn = document.querySelector(input.getAttribute('data-caps-warn'));
+        if (!warn) {
+            return;
+        }
+        input.addEventListener('keyup', (event) => {
+            const on = event.getModifierState ? event.getModifierState('CapsLock') : false;
+            warn.classList.toggle('d-none', !on);
+        });
+        input.addEventListener('blur', () => {
+            warn.classList.add('d-none');
+        });
+    });
 });

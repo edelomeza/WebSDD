@@ -1,10 +1,37 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Principal";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Bienvenido @User.Identity?.Name!!</h1>
-    <p>Sesión iniciada correctamente.</p>
+<div class="card shadow-sm hero-card mb-4">
+    <div class="login-hero px-4 pt-4 pb-3 text-center">
+        <i class="bi bi-shield-check" aria-hidden="true"></i>
+    </div>
+    <div class="card-body p-4 p-md-5 text-center">
+        <h1 class="display-5 fw-bold">Bienvenido @User.Identity?.Name!!</h1>
+        <p class="lead mb-3">Sesión iniciada correctamente.</p>
+        <span class="badge-session"><i class="bi bi-lock" aria-hidden="true"></i> Sesión protegida</span>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="info-card card shadow-sm h-100">
+            <div class="card-body">
+                <i class="bi bi-person-circle" aria-hidden="true"></i>
+                <h2 class="h5 fw-bold mt-2">Cuenta</h2>
+                <p class="mb-0">Usuario: @User.Identity?.Name</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="info-card card shadow-sm h-100">
+            <div class="card-body">
+                <i class="bi bi-shield-lock" aria-hidden="true"></i>
+                <h2 class="h5 fw-bold mt-2">Seguridad</h2>
+                <p class="mb-0">Tu sesión está protegida con una cookie segura de 24 horas.</p>
+            </div>
+        </div>
+    </div>
 </div>

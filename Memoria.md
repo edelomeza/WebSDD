@@ -2,6 +2,30 @@
 
 > Bitácora viva por fase/slice según `specs/templates/memoria-entry-template.md`. Máx ~10000 líneas: resumir lo que no aporte. Sin claves, tokens ni PII. Si algo se vuelve regla permanente, mover a `AGENTS.md`.
 
+## Fix visibilidad login — rebuild obligatorio en verde (2026-10-14)
+Estado: build Release 0/0 en 4 proyectos; tests 47/47; vivo puerto 5201 `/health/ready` 200 + `/Login` 200 con `login-col/login-card/login-title/caps-alert/password-eye/login-footer`; CSS fingerprint `/css/site.6whvz2n5rl.css` con `e2f0ec/26.25rem/caps-alert/password-eye`; sin `_Layout.cshtml.css` en conflicto (solo navbar/footer template).
+Decisiones: la causa de "no se refleja" es servir sin recompilar (`dotnet run --no-build` deja Razor viejo) + caché navegador + múltiples instancias; se recompiló y se verificó por `curl` sin caché; `MapStaticAssets` ya invalida CSS por hash.
+Deuda: ninguna nueva.
+A evitar: `dotnet run --no-build` tras editar `.cshtml`; validar solo a ojo en navegador con caché (usar `curl` + ventana privada + `Ctrl+F5`); correr VS/IIS y `dotnet run` a la vez en puertos distintos.
+
+## Rediseño login spec 7 puntos — tarjeta 420px en verde (2026-10-14)
+Estado: build Release 0/0 en 4 proyectos; tests 47/47 (Unit 20+Integration 20+Security 7); cobertura 90.6% ≥45% (396/437, 6 reportes); critic PASS, slnx PASS, endpoints OK, delta advisory; vivo `dotnet run`: `/health/ready` 200, `/Login` 200 con `login-col/login-card/login-title/login-footer/caps-alert/password-eye` + iconos + CSP nonce + antiforgery.
+Decisiones: fondo `linear-gradient(#e2f0ec→#fff)` en `site.css` (no inline); tarjeta `#fff` `0.5rem` `0 4px 12px rgba(0,0,0,0.05)` `26.25rem=420px`; título `#1e3a2f` izquierda + sub `small text-muted text-start`; inputs `border #dee2e6` + `placeholder #adb5bd` + fusión de bordes en grupo; ojo como `button.password-eye` blanco con `site.js` existente (sin script inline por CSP); caps como `.caps-alert` `#fef2f2/#fecaca/#7f1d1d` con `id+data-caps-warn+d-none` intactos; botón conserva `#88E788/#1a1a1a` AAA + `text-uppercase` por CSS (petición `#a3e635/#84cc16` con blanco suspende contraste) + `bi-box-arrow-in-right`; footer fuera de la card `small text-muted` + `© 2026`; removido CSS muerto hero/logo/badge/trust; `Login.cshtml.cs` intacto.
+Deuda: semgrep/gitleaks solo CI; firma pendiente de revisor.
+A evitar: script inline para el ojo (CSP `script-src 'self'`); `container` anidado; quitar `bi-person-circle/bi-lock` (rompe `LoginPage_Anonymous_ReturnsForm`); `#a3e635` con texto blanco (contraste insuficiente).
+
+## Rediseño login centrado — UI moderna en verde (2026-10-14)
+Estado: build Release 0/0 en 4 proyectos; tests 47/47 (Unit 20+Integration 20+Security 7); cobertura 90.6% ≥45% (396/437, 6 reportes); critic PASS, slnx PASS, endpoints OK, delta advisory; vivo `dotnet run`: `/health/ready` 200, `/Login` 200 con `row justify-content-center login-wrap` + `login-card mx-auto` + iconos + CSP nonce + antiforgery.
+Decisiones: centrado garantizado con `row justify-content-center` + `col-12 col-sm-11 col-md-9 col-lg-7 col-xl-6 col-xxl-5` + `mx-auto` + `align-items:center` (flex solo centraba dentro de `container` y se percibía a la izquierda); tarjeta `28rem` + logo circular + badges + footer trust; iconos industria `bi-shield-lock-fill/bi-person-circle/bi-lock/bi-eye/bi-box-arrow-in-right/bi-shield-check/bi-clock-history/bi-person-lock/bi-headset/bi-info-circle` locales sin CDN; se preservan `bi-person-circle`+`bi-lock`+`type=password`+`__RequestVerificationToken`+`Inicio de sesión` para `LoginPage_Anonymous_ReturnsForm`; sin cambios en `Login.cshtml.cs`, sin `style` inline, sin `<link cdn>`.
+Deuda: semgrep/gitleaks solo CI (sin CLI local); firma de rediseño pendiente de revisor.
+A evitar: quitar `bi-person-circle`/`bi-lock` (rompe convención T-001); anidar `container` dentro de `container` del layout (usar `row>col`); `style=""` inline (CSP `style-src 'self'`).
+
+## Cierre 007 — merge PR #32 a `main` (2026-10-13)
+Estado: merge exitoso `f011394`; `main` limpio y sincronizado; rama `creaSpecLogin` eliminada local/remoto.
+Decisiones: sin cambios post-merge (lo mergeado = lo verificado local).
+Deuda: firma formal de spec 007 por revisor en el PR (Borrador con evidencia mientras tanto).
+A evitar: dejar ramas mergeadas vivas en local/remoto.
+
 ## Fase-7 login 007 ejecutada — spec/plan/tasks/checklist en verde (2026-10-13)
 Estado: tasks 12/12; build 0/0 en 4 proyectos, tests 47/47 (Unit 20+Integration 20+Security 7), cobertura 90.6% ≥45% (396/437 líneas, 6 reportes frescos con `--collect`), critic PASS, slnx PASS, endpoints OK, sdd PASS, delta advisory exit 0; semgrep/gitleaks sin CLI local (vía CI); vivo `dotnet run` + curl: `/health/ready` 200 con headers, `/Login` 200 (CSP nonce distinto, 7 marcadores), `/` anónimo 302 `/Login?ReturnUrl=%2F`, POSTs 400→429 + `Retry-After: 60`. Spec 007 Borrador con evidencia.
 Decisiones: cookie `.WebSDD.Auth` HttpOnly+Always+Strict+Sliding 24h + fallback (`AddAuthorizationBuilder.SetFallbackPolicy`, ASP0025) + policy `Login` 5/5min particionada por IP (cubre página GET+POST; `RateLimiter→Auth` §4); expiración `min(24h,dteExpira)`; `Locked`→mismo genérico que `Invalid`; `StringLength` solo máximos 64/256; `LoggerMessage` por CA1848; borde API doblado en tests (cookie+antiforgery+CSP reales) y `AuthService` real en Unit con stub handler; `Index` reutilizada + `[AllowAnonymous]` en `Privacy/Error/Denegado` (Error evita bucles); `SecurityTest.csproj` +`Mvc.Testing`+ref WebSDD (faltaba); `HardeningTests` movidos a `/Login` (raíz ahora 302); icons `bootstrap-icons@1.11.3` MIT bytes verificados (85875/176032/130396 = metadata jsdelivr) + pin `libman.json` jsdelivr; contraste `#88E788`/`#1a1a1a` 11.46:1 (AAA).
