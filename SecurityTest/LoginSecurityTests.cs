@@ -39,10 +39,10 @@ public class LoginSecurityTests : IClassFixture<LoginSecurityFactory>
     [Fact]
     public async Task PostLogin_RapidPosts_Returns429WithRetryAfter()
     {
-        // La policy "Login" cubre la página (GET+POST): 1 GET del token + 2 POST ok, 3er POST 429.
+        // La policy "Login" cuenta solo POST: 1 GET del token (no consume) + 2 POST ok, 3er POST 429.
         // Doble Invalid: el 429 es del middleware, sin depender de la API externa.
         using var factory = _factory.WithWebHostBuilder(builder => builder
-            .UseSetting("RateLimiting:Login:PermitLimit", "3")
+            .UseSetting("RateLimiting:Login:PermitLimit", "2")
             .UseSetting("RateLimiting:Login:WindowSeconds", "300")
             .ConfigureTestServices(services =>
             {
@@ -60,6 +60,7 @@ public class LoginSecurityTests : IClassFixture<LoginSecurityFactory>
         second.StatusCode.Should().Be(HttpStatusCode.OK);
         third.StatusCode.Should().Be((HttpStatusCode)429);
         third.Headers.Should().ContainSingle(h => h.Key == "Retry-After");
+        (await third.Content.ReadAsStringAsync()).Should().Contain("Demasiados intentos");
     }
 
     [Fact]
